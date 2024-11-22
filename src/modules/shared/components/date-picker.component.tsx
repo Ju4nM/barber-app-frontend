@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-export default function DatePicker({ daysAvailable = Array.from({length: 7}, (_,i)=>i) }: { daysAvailable?: number[] }) {
+export default function DatePicker({ daysAvailable = Array.from({length: 7}, (_,i)=>i), onChange = () => {} }: { daysAvailable?: number[], onChange?: (date: Date, timestamp: number) => void }) {
   const currentDate: Date = new Date(Date.now());
   const [days, setDays] = useState<Date[]>([]); // establece los dias del picker
   const [monthSelected, selectMonth] = useState(currentDate.getMonth()); // mes actual
@@ -11,7 +11,7 @@ export default function DatePicker({ daysAvailable = Array.from({length: 7}, (_,
   const [dateSelected, setDate] = useState<number>(0); // fecha seleccionada
 
   const defaultClasses = "m-2 p-3 size-10 flex justify-center items-center select-none";
-const monthButtonClassList = "rounded-full hover:bg-[rgba(29,78,216,0.8)] size-8 flex text-center justify-center items-center cursor-pointer transition-[background]";
+  const monthButtonClassList = "rounded-full hover:bg-[rgba(217,233,255,0.4)] size-8 flex text-center justify-center items-center cursor-pointer transition-[background]";
   const dayClasses = defaultClasses + " rounded-full";
   const headerClases = defaultClasses + ""
   const daysAvailableMap: {[key: number]: number} = daysAvailable.reduce((acc: {[key: number]: number}, current: number) => {
@@ -40,7 +40,8 @@ const monthButtonClassList = "rounded-full hover:bg-[rgba(29,78,216,0.8)] size-8
   }
   
   const selectDate = (timestamp: number) => {
-    setDate(timestamp)
+    setDate(timestamp),
+    onChange(new Date(timestamp), timestamp);
   }
   
   const genDays = (month: number) => {
@@ -48,7 +49,6 @@ const monthButtonClassList = "rounded-full hover:bg-[rgba(29,78,216,0.8)] size-8
 
 		const days: Date[] = [];
     const space: ReactNode[] = [];
-    console.log(date.getDay());
     for (let i = 0; i < date.getDay(); i++) {
 			space.push(<span key = { i } className = { `${dayClasses} invisible` }>{ i }</span>);
     }
@@ -71,7 +71,7 @@ const monthButtonClassList = "rounded-full hover:bg-[rgba(29,78,216,0.8)] size-8
   }, [monthSelected]);
 
   return (
-    <div className = "p-2 sm:p-8 border-[rgba(26,26,26,0.1)] shadow-lg rounded-md border-[1px]">
+    <div className = "p-2 sm:p-8 border-[rgba(26,26,26,0.1)] shadow-lg rounded-md border-[1px] h-fit">
       <h4 className = "text-center font-bold">{ year }</h4>
       <div className = "flex justify-evenly my-3">
         <div onClick={ prevMonth } className = {`${monthSelected === currentDate.getMonth() && year == currentDate.getFullYear() ? "invisible" : ""} ${monthButtonClassList}`}><FaChevronLeft className="size-4" /></div>
@@ -87,14 +87,13 @@ const monthButtonClassList = "rounded-full hover:bg-[rgba(29,78,216,0.8)] size-8
           const timestampFromToday = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()).getTime()
           const dayNumber = date.getDay();
           let classList = dayClasses;
-          let dayElement = <div key = { `${monthDay}${dayNumber}` } className = { classList }><span>{ monthDay }</span></div>;
-
+          
           if (daysAvailableMap[dayNumber] !== undefined && timestamp >= timestampFromToday) {
             classList += " bg-[rgba(217,233,255,0.4)] text-blue-700 font-bold cursor-pointer";
-            dayElement = <div onClick={() => selectDate(timestamp)} key = { `${monthDay}${dayNumber}` } className = { `${classList} ${dateSelected == timestamp ? "bg-blue-800 text-blue-50" : "hover:bg-[rgba(217,233,255,1)]"}` }><span>{ monthDay }</span></div>;
+            return <div onClick={() => selectDate(timestamp)} key = { `${monthDay}${dayNumber}` } className = { `${classList} ${dateSelected == timestamp ? "bg-blue-800 text-blue-50" : "hover:bg-[rgba(217,233,255,1)]"}` }><span>{ monthDay }</span></div>;
           }
 
-          return dayElement;
+          return <div key = { `${monthDay}${dayNumber}` } className = { classList }><span>{ monthDay }</span></div>;;
         })}
       </div>
     </div>
