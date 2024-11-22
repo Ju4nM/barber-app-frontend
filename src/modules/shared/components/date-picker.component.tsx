@@ -74,7 +74,7 @@ const monthButtonClassList = "rounded-full hover:bg-[rgba(29,78,216,0.8)] size-8
     <div className = "p-2 sm:p-8 border-[rgba(26,26,26,0.1)] shadow-lg rounded-md border-[1px]">
       <h4 className = "text-center font-bold">{ year }</h4>
       <div className = "flex justify-evenly my-3">
-        <div onClick={ prevMonth } className = {`${monthSelected === currentDate.getMonth() ? "invisible" : ""} ${monthButtonClassList}`}><FaChevronLeft className="size-4" /></div>
+        <div onClick={ prevMonth } className = {`${monthSelected === currentDate.getMonth() && year == currentDate.getFullYear() ? "invisible" : ""} ${monthButtonClassList}`}><FaChevronLeft className="size-4" /></div>
         <div className = "flex items-center"><span>{ months[monthSelected] }</span></div>
         <div onClick={ nextMonth } className = {`${monthSelected < months.length ? "" : "invisible"} ${monthButtonClassList}`}><FaChevronRight className="size-4" /></div>
       </div>
@@ -84,12 +84,12 @@ const monthButtonClassList = "rounded-full hover:bg-[rgba(29,78,216,0.8)] size-8
         { days.map((date) => {
           const monthDay = date.getDate();
           const timestamp = date.getTime();
+          const timestampFromToday = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()).getTime()
           const dayNumber = date.getDay();
           let classList = dayClasses;
           let dayElement = <div key = { `${monthDay}${dayNumber}` } className = { classList }><span>{ monthDay }</span></div>;
 
-          // if (daysAvailableMap[dayNumber] !== undefined && (monthDay >= currentDate.getDate() && date.getMonth() >= currentDate.getMonth() && currentDate.getFullYear() >= year)) {
-          if (daysAvailableMap[dayNumber] !== undefined && (year >= currentDate.getFullYear())) {
+          if (daysAvailableMap[dayNumber] !== undefined && timestamp >= timestampFromToday) {
             classList += " bg-[rgba(217,233,255,0.4)] text-blue-700 font-bold cursor-pointer";
             dayElement = <div onClick={() => selectDate(timestamp)} key = { `${monthDay}${dayNumber}` } className = { `${classList} ${dateSelected == timestamp ? "bg-blue-800 text-blue-50" : "hover:bg-[rgba(217,233,255,1)]"}` }><span>{ monthDay }</span></div>;
           }
