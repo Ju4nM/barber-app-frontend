@@ -11,7 +11,7 @@ export default function DatePicker({ daysAvailable = Array.from({length: 7}, (_,
   const [dateSelected, setDate] = useState<number>(0); // fecha seleccionada
 
   const defaultClasses = "m-2 p-3 size-10 flex justify-center items-center select-none";
-  const monthButtonClassList = "rounded-full hover:bg-[rgba(217,233,255,0.4)] size-8 flex text-center justify-center items-center cursor-pointer transition-[background]";
+  const monthButtonClassList = "rounded-full hover:bg-[rgba(217,233,255,0.4)] size-8 flex text-center justify-center items-center cursor-pointer transition-[background] select-none";
   const dayClasses = defaultClasses + " rounded-full";
   const headerClases = defaultClasses + ""
   const daysAvailableMap: {[key: number]: number} = daysAvailable.reduce((acc: {[key: number]: number}, current: number) => {
@@ -40,7 +40,7 @@ export default function DatePicker({ daysAvailable = Array.from({length: 7}, (_,
   }
   
   const selectDate = (timestamp: number) => {
-    setDate(timestamp),
+    setDate(timestamp);
     onChange(new Date(timestamp), timestamp);
   }
   
@@ -72,10 +72,10 @@ export default function DatePicker({ daysAvailable = Array.from({length: 7}, (_,
 
   return (
     <div className = "p-2 sm:p-8 border-[rgba(26,26,26,0.1)] shadow-lg rounded-md border-[1px] h-fit">
-      <h4 className = "text-center font-bold">{ year }</h4>
+      <h4 className = "text-center font-bold select-none">{ year }</h4>
       <div className = "flex justify-evenly my-3">
         <div onClick={ prevMonth } className = {`${monthSelected === currentDate.getMonth() && year == currentDate.getFullYear() ? "invisible" : ""} ${monthButtonClassList}`}><FaChevronLeft className="size-4" /></div>
-        <div className = "flex items-center"><span>{ months[monthSelected] }</span></div>
+        <div className = "flex items-center select-none"><span>{ months[monthSelected] }</span></div>
         <div onClick={ nextMonth } className = {`${monthSelected < months.length ? "" : "invisible"} ${monthButtonClassList}`}><FaChevronRight className="size-4" /></div>
       </div>
       <div className = "grid grid-cols-7 place-items-center">
@@ -89,8 +89,8 @@ export default function DatePicker({ daysAvailable = Array.from({length: 7}, (_,
           let classList = dayClasses;
           
           if (daysAvailableMap[dayNumber] !== undefined && timestamp >= timestampFromToday) {
-            classList += " bg-[rgba(217,233,255,0.4)] text-blue-700 font-bold cursor-pointer";
-            return <div onClick={() => selectDate(timestamp)} key = { `${monthDay}${dayNumber}` } className = { `${classList} ${dateSelected == timestamp ? "bg-blue-800 text-blue-50" : "hover:bg-[rgba(217,233,255,1)]"}` }><span>{ monthDay }</span></div>;
+            classList += " bg-[rgba(217,233,255,0.4)] font-bold cursor-pointer";
+            return <div onClick={() => selectDate(timestamp)} key = { `${monthDay}${dayNumber}` } className = { `${classList} ${dateSelected == timestamp ? "bg-blue-800 text-blue-50" : "hover:bg-[rgba(217,233,255,1)] text-blue-700 "}` }><span>{ monthDay }</span></div>;
           }
 
           return <div key = { `${monthDay}${dayNumber}` } className = { classList }><span>{ monthDay }</span></div>;;
