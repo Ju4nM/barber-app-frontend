@@ -1,5 +1,6 @@
 import { useState } from "react";
 import DatePicker from "../shared/components/date-picker.component";
+import { useNavigate } from "react-router-dom";
 
 
 export default function PrincipalPage() {
@@ -8,6 +9,13 @@ export default function PrincipalPage() {
     const onChangePicker = (date: Date, timestamp: number) => {
         selectDate({ date, timestamp });
     }
+
+    const navigate = useNavigate();
+
+    const handleButtonClick = () => {
+        navigate('/Estilos');
+    };
+
     return (
         <div>
             <div className="flex gap-3 items-center">
@@ -42,7 +50,7 @@ export default function PrincipalPage() {
                             <button type="submit" className="border-4 p-3 rounded-xl bg-blue-500 font-bold text-xl w-full">Agendar</button>
                         </div>
                         <div className="pt-5">
-                            <button type="submit" className="border-4 p-3 rounded-xl bg-green-500 font-bold text-xl w-full">Estilos</button>
+                            <button onClick={handleButtonClick} type="submit" className="border-4 p-3 rounded-xl bg-green-500 font-bold text-xl w-full">Estilos</button>
                         </div>
                     </div>
                 </div>
