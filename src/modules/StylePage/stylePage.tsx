@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import PhotoCarousel from "../shared/components/photoCarrusel.component";
 import { useNavigate } from "react-router-dom";
 
